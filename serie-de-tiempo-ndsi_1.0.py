@@ -3,7 +3,7 @@ import numpy as np
 print "Excecuting ndsi v1 "
 nbar = xarr0
 nodata=-9999
-bands=["green","swir1"]
+bands=["swir1","green"]
 medians={}
 cloud_mask=np.where(np.logical_and(nbar["cf_mask"].values!=2, nbar["cf_mask"].values<4), True, False)
 for band in bands:
@@ -19,7 +19,7 @@ del datos
 period_swir1 = medians["swir1"]
 period_green = medians["green"]
 del medians
-mask_nan=np.logical_or(np.isnan(period_green), np.isnan(period_swir1))
+mask_nan=np.logical_or(np.isnan(period_swir1), np.isnan(period_green))
 period_ndsi = np.true_divide( np.subtract(period_green,period_swir1) , np.add(period_green,period_swir1) )
 period_ndsi[mask_nan]=np.nan
 #Hace un clip para evitar valores extremos.
