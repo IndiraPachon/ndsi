@@ -16,8 +16,8 @@ for band in bands:
     medians[band]=np.nanmedian(datos,0)
     medians[band][np.sum(allNan,0)<minValid]=np.nan
 del datos
-period_green = medians["green"]
 period_swir1 = medians["swir1"]
+period_green = medians["green"]
 del medians
 mask_nan=np.logical_or(np.isnan(period_green), np.isnan(period_swir1))
 period_ndsi = np.true_divide( np.subtract(period_green,period_swir1) , np.add(period_green,period_swir1) )
