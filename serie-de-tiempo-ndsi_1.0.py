@@ -5,7 +5,7 @@ nbar = xarr0
 nodata=-9999
 bands=["swir1","green"]
 medians={}
-cloud_mask=np.where(np.logical_and(nbar["cf_mask"].values!=2, nbar["cf_mask"].values<4), True, False)
+#cloud_mask=np.where(np.logical_and(nbar["cf_mask"].values!=2, nbar["cf_mask"].values<4), True, False)
 for band in bands:
     datos=np.where(np.logical_and(nbar.data_vars[band]!=nodata,cloud_mask),nbar.data_vars[band], np.nan)
     allNan=~np.isnan(datos)
