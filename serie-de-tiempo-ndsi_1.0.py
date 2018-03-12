@@ -1,11 +1,23 @@
 import xarray as xr
 import numpy as np
 print "Excecuting ndsi v1 "
+
+def isin(element, test_elements, assume_unique=False, invert=False):
+    "definiendo la función isin de numpy para la versión anterior a la 1.13, en la que no existe"
+    element = np.asarray(element)
+    return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
+
 nbar = xarr0
 nodata=-9999
 bands=["swir1","green"]
 medians={}
-cloud_mask=np.where(np.logical_and(nbar["cf_mask"].values!=2, nbar["cf_mask"].values<4), True, True)
+cvalidValues=set()
+if product=="LS7_ETM_LEDAPS":
+    validValues=[66,68,130,132]
+elif product == "LS8_OLI_LASRC":
+    validValues=[322, 386, 834, 898, 1346, 324, 388, 836, 900, 1348]
+
+cloud_mask=isin(nbar["pixel_qa"].values, validValues)
 for band in bands:
     datos=np.where(np.logical_and(nbar.data_vars[band]!=nodata,cloud_mask),nbar.data_vars[band], np.nan)
     allNan=~np.isnan(datos)
@@ -16,13 +28,13 @@ for band in bands:
     medians[band]=np.nanmedian(datos,0)
     medians[band][np.sum(allNan,0)<minValid]=np.nan
 del datos
-period_swir1 = "swir1"
-period_green = "green"
+period_sw1 = medians["swir1"]
+period_g = medians["green"]
 del medians
-mask_nan=np.logical_or(np.isnan(period_swir1), np.isnan(period_green))
-period_ndsi = np.true_divide( np.subtract(period_green,period_swir1) , np.add(period_green,period_swir1) )
+mask_nan=np.logical_or(np.isnan(period_sw1), np.isnan(period_g))
+period_nvdi = np.true_divide( np.subtract(period_sw1,period_g) , np.add(period_sw1,period_g) )
 period_ndsi[mask_nan]=np.nan
-#Hace un clip para evitar valores extremos.
+#Hace un clip para evitar valores extremos. 
 period_ndsi[period_ndsi>1]=1.1
 period_ndsi[period_ndsi<-1]=-1.1
 import xarray as xr
