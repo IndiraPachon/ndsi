@@ -13,9 +13,9 @@ bands=["swir1","green"]
 medians={}
 cvalidValues=set()
 if product=="LS7_ETM_LEDAPS":
-    validValues=[80, 112, 144, 176,66,68,130,132]
+    validValues=[80, 112, 144, 176,66,68,72, 80, 96, 112,130,132, 136, 144, 160, 176]
 elif product == "LS8_OLI_LASRC":
-    validValues=[322, 386, 834, 898, 1346, 324, 388, 836, 900, 1348,336, 368, 400, 432, 848, 880, 912, 944, 1352]
+    validValues=[322, 324, 328, 336, 352, 368, 386, 388, 392, 400, 416, 432, 480,336, 368, 400, 432, 848, 880, 912, 944, 1352, 322, 324, 328, 336, 352, 368, 834, 836, 840, 848, 864, 880]
 
 cloud_mask=isin(nbar["pixel_qa"].values, validValues)
 for band in bands:
